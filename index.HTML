@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Matemática Pro</title>
+    <style>
+        /* === DISEÑO AVANZADO MODO OSCURO ACTUALIZADO === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            /* NUEVO FONDO: Degradado oscuro con un patrón geométrico sutil */
+            background-color: #0f172a;
+            background-image: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(8, 14, 28, 0.95)), 
+                              url('https://images.unsplash.com/photo-1603356033288-acfcb54801e6?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .calculator-card {
+            /* NUEVO COLOR DE FONDO: Azul marino más oscuro y translúcido */
+            background-color: rgba(23, 31, 46, 0.75); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 35px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        h2 {
+            text-align: center;
+            /* NUEVO COLOR: Azul cian vibrante */
+            color: #06b6d4; 
+            margin-bottom: 30px;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: 500;
+            color: #94a3b8;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* === COLORES DIFERENTES EN LOS RECUADROS (INPUTS) === */
+        #num1 {
+            /* NUEVO COLOR: Borde cian */
+            border-left: 4px solid #06b6d4; 
+        }
+
+        #num2 {
+            /* NUEVO COLOR: Borde magenta */
+            border-left: 4px solid #d946ef; 
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px 16px;
+            /* NUEVO FONDO: Más oscuro */
+            background-color: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border-radius: 12px;
+            font-size: 18px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            background-color: #0f172a;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+
+        #num1:focus { border-color: #22d3ee; }
+        #num2:focus { border-color: #f0abfc; }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* === REJILLA DE BOTONES DE OPERACIÓN === */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            border: none;
+            padding: 14px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* NUEVOS COLORES DE BOTONES: Paleta basada en tonos fríos y vibrantes */
+        .btn-suma { background-color: #06b6d4; }   /* Cian */
+        .btn-resta { background-color: #3b82f6; }  /* Azul */
+        .btn-multi { background-color: #d946ef; }  /* Magenta */
+        .btn-div { background-color: #a855f7; }    /* Violeta */
+
+        /* Botón Limpiar con degradado naranja-rosa */
+        .btn-clear {
+            width: 100%;
+            border: none;
+            margin-top: 18px;
+            padding: 14px;
+            background: linear-gradient(135deg, #f97316, #ec4899);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-clear:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(249, 115, 22, 0.3);
+        }
+
+        .btn-clear:active {
+            transform: translateY(0);
+        }
+
+        /* === CAJA DE RESULTADO === */
+        #resultado-box {
+            margin-top: 25px;
+            padding: 18px;
+            background-color: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #resultado-box h3 {
+            font-size: 15px;
+            color: #94a3b8;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #resultado {
+            display: block;
+            font-size: 32px;
+            color: #ffffff;
+            font-weight: 700;
+            margin-top: 6px;
+            font-family: 'Courier New', Courier, monospace; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-card">
+        <h2>📊 Calculadora Pro</h2>
+        
+        <div class="input-group">
+            <label>Primer Número:</label>
+            <input type="number" id="num1" placeholder="0">
+        </div>
+
+        <div class="input-group">
+            <label>Segundo Número:</label>
+            <input type="number" id="num2" placeholder="0">
+        </div>
+
+        <div class="buttons-grid">
+            <button onclick="calcular('suma')" class="btn btn-suma">➕ Suma</button>
+            <button onclick="calcular('resta')" class="btn btn-resta">➖ Resta</button>
+            <button onclick="calcular('multiplicacion')" class="btn btn-multi">✖ Multiplicación</button>
+            <button onclick="calcular('division')" class="btn btn-div">➗ División</button>
+        </div>
+
+        <button onclick="limpiar()" class="btn-clear">🔄 Limpiar Campos</button>
+
+        <div id="resultado-box">
+            <h3>Resultado</h3>
+            <span id="resultado">0</span>
+        </div>
+    </div>
+
+    <script>
+        // === LÓGICA DE JAVASCRIPT ===
+        function calcular(operacion) {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const resultadoBox = document.getElementById('resultado-box');
+            const resultadoText = document.getElementById('resultado');
+
+            if (isNaN(num1) || isNaN(num2)) {
+                alert("Por favor, ingrese ambos números.");
+                return;
+            }
+
+            let resultado = 0;
+
+            switch (operacion) {
+                case 'suma': resultado = num1 + num2; break;
+                case 'resta': resultado = num1 - num2; break;
+                case 'multiplicacion': resultado = num1 * num2; break;
+                case 'division': 
+                    if (num2 === 0) {
+                        alert("No se puede dividir entre cero.");
+                        return;
+                    }
+                    resultado = num1 / num2; 
+                    break;
+            }
+
+            // Muestra un máximo de 4 decimales si el número no es entero
+            resultadoText.innerText = Number.isInteger(resultado) ? resultado : resultado.toFixed(4).replace(/\.?0+$/, "");
+            resultadoBox.style.display = "block";
+        }
+
+        function limpiar() {
+            document.getElementById('num1').value = "";
+            document.getElementById('num2').value = "";
+            document.getElementById('resultado-box').style.display = "none";
+        }
+    </script>
+</body>
+</html>
